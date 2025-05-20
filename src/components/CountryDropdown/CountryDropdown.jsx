@@ -1,5 +1,6 @@
 import { Dropdown, ButtonGroup, Button } from 'react-bootstrap';
 import { fetchCountries, setSelectedCountry } from '../../slices/uiSlice';
+import { setGraphSelectedCountry } from '../../slices/graphSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 
@@ -16,10 +17,16 @@ export default function CountryDropdown() {
         if (status === 'idle') {
             dispatch(fetchCountries());
         }
-    }, [status, dispatch]);
+
+        if (selectedCountry) {
+            dispatch(setGraphSelectedCountry(selectedCountry));
+        };
+
+    }, [status, dispatch, selectedCountry]);
 
     const handleCountryClick = (country) => {
         dispatch(setSelectedCountry(country));
+        dispatch(setGraphSelectedCountry(country));
     };
 
     return (
