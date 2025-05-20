@@ -1,0 +1,9 @@
+@import "../styles/bootstrap-variables.scss";
+
+.wrapper-container {
+    border: 1px solid $gray-600;
+    min-width: 375px;
+    min-height: 300px;
+    height: 80vh;
+    padding: 20px 20px;
+}
