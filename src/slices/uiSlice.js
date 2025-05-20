@@ -16,9 +16,26 @@ export const fetchCountries = createAsyncThunk(
     }
 );
 
+export const fetchCategories = createAsyncThunk(
+    'ui/fetchCategories',
+    async (_, thunkAPI) => {
+        try {
+            const response = await fetch('https://api.apptica.com/v1/applicationCategory?platform=1&B4NKGg=fVN5Q9KVOlOHDx9mOsKPAQsFBlEhBOwguLkNEDTZvKzJzT3l');
+            if (!response.ok) {
+                throw new Error('Не удалось загрузить список категорий');
+            }
+            const data = await response.json();
+            return data.data;
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error.message);
+        }
+    }
+);
+
 const uiSlice = createSlice({
     initialState: {
         countries: [],
+        categories: [],
         selectedCountry: null,
         status: 'idle',
         error: null
@@ -42,6 +59,19 @@ const uiSlice = createSlice({
                 }
             })
             .addCase(fetchCountries.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.payload;
+            })
+
+            .addCase(fetchCategories.pending, (state) => {
+                state.status = 'loading';
+            })
+            .addCase(fetchCategories.fulfilled, (state, action) => {
+                state.status = 'succeeded';
+                state.categories = action.payload;
+
+            })
+            .addCase(fetchCategories.rejected, (state, action) => {
                 state.status = 'failed';
                 state.error = action.payload;
             });
