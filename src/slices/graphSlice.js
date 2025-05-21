@@ -44,20 +44,24 @@ export const fetchGraphData = createAsyncThunk(
                             spanGaps: true
                         });
 
-                        csv.push({
-                            label: fullLabel,
-                            datasets: dataPoints.join(),
-                        })
+                        const rawDataDates = rawData[categoryId][subCategoryId];
+                        for (const date in rawDataDates) {
+                            csv.push({
+                                category: fullLabel,
+                                date: date,
+                                value: rawDataDates[date]
+                            })
+                        }
                     }
-                }
-            };
+                };
 
-            return {
-                'datasets': datasets,
-                'labels': labels,
-                'csv': csv,
-                'last30DaysISO': last30DaysISO,
-            };
+                return {
+                    'datasets': datasets,
+                    'labels': labels,
+                    'csv': csv,
+                    'last30DaysISO': last30DaysISO,
+                };
+            }
         } catch (error) {
             return thunkAPI.rejectWithValue(error.message);
         }
