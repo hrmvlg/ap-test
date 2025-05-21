@@ -15,8 +15,12 @@ export const fetchGraphData = createAsyncThunk(
         const datasets = [];
         const csv = [];
 
+        const dateRange = state.ui.dateRange;
+        const dateFrom = dateRange[0];
+        const dateTo = dateRange[1];
+
         try {
-            const response = await fetch(`https://api.apptica.com/package/top_history/9379/${selectedCountry}?date_from=2025-05-14&date_to=2025-05-15&platforms=1&B4NKGg=fVN5Q9KVOlOHDx9mOsKPAQsFBlEhBOwguLkNEDTZvKzJzT3l`);
+            const response = await fetch(`https://api.apptica.com/package/top_history/9379/${selectedCountry}?date_from=${dateFrom}&date_to=${dateTo}&platforms=1&B4NKGg=fVN5Q9KVOlOHDx9mOsKPAQsFBlEhBOwguLkNEDTZvKzJzT3l`);
             if (!response.ok) {
                 throw new Error('Не удалось загрузить данные');
             }

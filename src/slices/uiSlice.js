@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { getFirstDayOfLast30, getLastDayOfLast30 } from '../helpers/dateHelpers';
 
 export const fetchCountries = createAsyncThunk(
     'ui/fetchCountries',
@@ -26,7 +27,7 @@ export const fetchCategories = createAsyncThunk(
                 throw new Error('Не удалось загрузить список категорий');
             }
             const data = await response.json();
-           // Gcategories.push(...data.data);
+            // Gcategories.push(...data.data);
             return data.data;
         } catch (error) {
             return thunkAPI.rejectWithValue(error.message);
@@ -41,6 +42,11 @@ const uiSlice = createSlice({
         selectedCountry: null,
         statusCountries: 'idle',
         statusCategories: 'idle',
+        dateRange:
+            [
+                getFirstDayOfLast30(),
+                getLastDayOfLast30(),
+            ],
         error: null
     },
     name: 'ui',
@@ -48,6 +54,9 @@ const uiSlice = createSlice({
         setSelectedCountry(state, action) {
             state.selectedCountry = action.payload;
         },
+        setDateRange(state, action) {
+            state.dateRange = action.payload;
+        }
     },
     extraReducers: (builder) => {
         builder
@@ -81,5 +90,5 @@ const uiSlice = createSlice({
     },
 });
 
-export const { setSelectedCountry } = uiSlice.actions;
+export const { setSelectedCountry, setDateRange } = uiSlice.actions;
 export default uiSlice.reducer;

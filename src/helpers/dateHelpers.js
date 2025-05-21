@@ -37,3 +37,12 @@ export function getLast30DaysISO() {
     return dates;
 };
 
+export function getFirstDayOfLast30() {
+    const dates = getLast30DaysISO();
+    return dates[0];
+}
+
+export function getLastDayOfLast30() {
+    const dates = getLast30DaysISO();
+    return dates[dates.length - 1];
+}

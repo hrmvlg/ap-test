@@ -1,9 +1,11 @@
 import { useRef } from 'react';
 import Chart from './components/Chart/Chart';
 import CountryDropdown from './components/CountryDropdown/CountryDropdown';
-import styles from '../src/assets/styles/base.module.scss'
 import DownloadButton from './components/DownloadButton/DownloadButton';
+import RangeDatePicker from './components/RangeDatePicker/RangeDatePicker';
+
 import html2canvas from 'html2canvas';
+import styles from '../src/assets/styles/base.module.scss'
 
 function App() {
 
@@ -34,6 +36,7 @@ function App() {
         <DownloadButton type="png" onDownload={handleDownloadImage} />
         <DownloadButton type="csv" />
         <CountryDropdown />
+        <RangeDatePicker />
       </div>
       <Chart ref={printRef} />
     </div>
