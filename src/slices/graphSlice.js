@@ -11,8 +11,9 @@ export const fetchGraphData = createAsyncThunk(
         const selectedCountry = state.ui.selectedCountry.id;
         const categories = state.ui.categories;
         const labels = getLast30Days();
-        const searchDates = getLast30DaysISO();
+        const last30DaysISO = getLast30DaysISO();
         const datasets = [];
+        const csv = [];
 
         try {
             const response = await fetch(`https://api.apptica.com/package/top_history/9379/${selectedCountry}?date_from=2025-05-14&date_to=2025-05-15&platforms=1&B4NKGg=fVN5Q9KVOlOHDx9mOsKPAQsFBlEhBOwguLkNEDTZvKzJzT3l`);
@@ -25,14 +26,15 @@ export const fetchGraphData = createAsyncThunk(
                 const rawData = graphData.data;
                 for (const categoryId in rawData) {
                     for (const subCategoryId in rawData[categoryId]) {
-                        const dataPoints = searchDates.map(date => rawData[categoryId][subCategoryId][date] ?? null);
+                        const dataPoints = last30DaysISO.map(date => rawData[categoryId][subCategoryId][date] ?? null);
 
                         const subCategory = subCategoryMap[subCategoryId];
                         const category = findCategoryById(categories, categoryId);
                         const color = getRandomColor();
+                        const fullLabel = `${category.name ? category.name : categoryId} - ${subCategory}`;
 
                         datasets.push({
-                            label: `${category.name ? category.name : categoryId} - ${subCategory}`,
+                            label: fullLabel,
                             data: dataPoints,
                             borderColor: color,
                             backgroundColor: color,
@@ -41,13 +43,20 @@ export const fetchGraphData = createAsyncThunk(
                             fill: false,
                             spanGaps: true
                         });
+
+                        csv.push({
+                            label: fullLabel,
+                            datasets: dataPoints.join(),
+                        })
                     }
                 }
             };
 
             return {
                 'datasets': datasets,
-                'labels': labels
+                'labels': labels,
+                'csv': csv,
+                'last30DaysISO': last30DaysISO,
             };
         } catch (error) {
             return thunkAPI.rejectWithValue(error.message);
@@ -60,6 +69,8 @@ const graphSlice = createSlice({
     initialState: {
         datasets: [],
         labels: [],
+        csv: [],
+        last30DaysISO: [],
         status: 'idle',
         error: null
     },
@@ -73,6 +84,8 @@ const graphSlice = createSlice({
                 state.status = 'succeeded';
                 state.datasets = action.payload.datasets;
                 state.labels = action.payload.labels;
+                state.csv = action.payload.csv;
+                state.last30DaysISO = action.payload.last30DaysISO;
             })
             .addCase(fetchGraphData.rejected, (state, action) => {
                 state.status = 'failed';
