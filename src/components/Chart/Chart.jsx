@@ -16,7 +16,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchGraphData } from '../../slices/graphSlice';
 import { fetchCategories } from '../../slices/uiSlice';
 
-export default function Chart() {
+export default function Chart({ ref }) {
 
     ChartJS.register(
         CategoryScale,
@@ -84,7 +84,7 @@ export default function Chart() {
     };
 
     return (
-        <div className={styles["chart-container"]}>
+        <div className={styles["chart-container"]} ref={ref}>
             <Line options={options} data={data} />
         </div>
     );
