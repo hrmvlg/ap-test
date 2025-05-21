@@ -7,6 +7,7 @@ function App() {
   return (
     <div className={`container ${styles["wrapper-container"]}`}>
       <div className="container d-flex justify-content-end" style={{ columnGap: '10px' }}>
+        <DownloadButton type="png" />
         <DownloadButton type="csv" />
         <CountryDropdown />
       </div>
