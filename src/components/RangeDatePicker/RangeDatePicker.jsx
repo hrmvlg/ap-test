@@ -18,11 +18,11 @@ export default function RangeDatePicker() {
     };
 
     return (
-        <Row className={styles['range-datepicker']}>
-            <Col className={styles['range-datepicker__title']}>
+        <Row className={`${styles['range-datepicker']}`}>
+            <Col className={` ${styles['range-datepicker__title']}`}>
                 Period
             </Col>
-            <Col className={styles['range-datepicker__calendar']}>
+            <Col className={`${styles['range-datepicker__calendar']}`}>
                 <DatePicker
                     range
                     dateSeparator=" - "

@@ -3,7 +3,8 @@
 .wrapper-container {
     border: 1px solid $gray-600;
     min-width: 375px;
-    min-height: 300px;
-    height: 80vh;
+    min-height: fit-content;
+    height: 90vh;
     padding: 20px 20px;
+    margin-top: 20px;
 }

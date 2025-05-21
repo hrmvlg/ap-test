@@ -6,6 +6,7 @@ import RangeDatePicker from './components/RangeDatePicker/RangeDatePicker';
 
 import html2canvas from 'html2canvas';
 import styles from '../src/assets/styles/base.module.scss'
+import { Row, Col } from 'react-bootstrap';
 
 function App() {
 
@@ -32,12 +33,20 @@ function App() {
 
   return (
     <div className={`container ${styles["wrapper-container"]}`}>
-      <div className="container d-flex justify-content-end" style={{ columnGap: '10px' }}>
-        <DownloadButton type="png" onDownload={handleDownloadImage} />
-        <DownloadButton type="csv" />
-        <CountryDropdown />
-        <RangeDatePicker />
-      </div>
+      <Row className='justify-content-end align-items-center  gap-2'>
+        <Col xs="auto">
+          <DownloadButton type="png" onDownload={handleDownloadImage} />
+        </Col>
+        <Col xs="auto">
+          <DownloadButton type="csv" />
+        </Col>
+        <Col xs="auto">
+          <CountryDropdown />
+        </Col >
+        <Col xs="auto" className='h-100'>
+          <RangeDatePicker />
+        </Col>
+      </Row>
       <Chart ref={printRef} />
     </div>
   )
