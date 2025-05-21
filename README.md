@@ -33,6 +33,9 @@
 - **SCSS**: Стили
 - [**Chart.js**](https://www.chartjs.org/docs/latest/): Библиотека для графика
 - [**react-chartjs-2**](https://react-chartjs-2.js.org/): Компоненты Chart.js для React
+- [**react-csv**](https://www.npmjs.com/package/react-csv): Экспорт CSV файлов
+- [**html2canvas**](https://html2canvas.hertzen.com/): Экспорт PNG файлов
+- [**react-multi-date-picker**](https://shahabyazdi.github.io/react-multi-date-picker/range/): Компонент календаря
 
 ## Установка и запуск
 
