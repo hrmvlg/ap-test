@@ -27,7 +27,6 @@ export const fetchCategories = createAsyncThunk(
                 throw new Error('Не удалось загрузить список категорий');
             }
             const data = await response.json();
-            // Gcategories.push(...data.data);
             return data.data;
         } catch (error) {
             return thunkAPI.rejectWithValue(error.message);
