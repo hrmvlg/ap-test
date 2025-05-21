@@ -19,12 +19,14 @@ export const fetchCountries = createAsyncThunk(
 export const fetchCategories = createAsyncThunk(
     'ui/fetchCategories',
     async (_, thunkAPI) => {
+
         try {
             const response = await fetch('https://api.apptica.com/v1/applicationCategory?platform=1&B4NKGg=fVN5Q9KVOlOHDx9mOsKPAQsFBlEhBOwguLkNEDTZvKzJzT3l');
             if (!response.ok) {
                 throw new Error('Не удалось загрузить список категорий');
             }
             const data = await response.json();
+           // Gcategories.push(...data.data);
             return data.data;
         } catch (error) {
             return thunkAPI.rejectWithValue(error.message);
@@ -37,7 +39,8 @@ const uiSlice = createSlice({
         countries: [],
         categories: [],
         selectedCountry: null,
-        status: 'idle',
+        statusCountries: 'idle',
+        statusCategories: 'idle',
         error: null
     },
     name: 'ui',
@@ -49,30 +52,30 @@ const uiSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(fetchCountries.pending, (state) => {
-                state.status = 'loading';
+                state.statusCountries = 'loading';
             })
             .addCase(fetchCountries.fulfilled, (state, action) => {
-                state.status = 'succeeded';
+                state.statusCountries = 'succeeded';
                 state.countries = action.payload;
                 if (!state.selectedCountry && action.payload.length > 0) {
                     state.selectedCountry = action.payload.find((country) => country.id === 1) || null;
                 }
             })
             .addCase(fetchCountries.rejected, (state, action) => {
-                state.status = 'failed';
+                state.statusCountries = 'failed';
                 state.error = action.payload;
             })
 
             .addCase(fetchCategories.pending, (state) => {
-                state.status = 'loading';
+                state.statusCategories = 'loading';
             })
             .addCase(fetchCategories.fulfilled, (state, action) => {
-                state.status = 'succeeded';
+                state.statusCategories = 'succeeded';
                 state.categories = action.payload;
 
             })
             .addCase(fetchCategories.rejected, (state, action) => {
-                state.status = 'failed';
+                state.statusCategories = 'failed';
                 state.error = action.payload;
             });
     },

@@ -10,22 +10,18 @@ export default function CountryDropdown() {
     const {
         countries,
         selectedCountry,
-        status,
+        statusCountries,
     } = useSelector((state) => state.ui);
 
     useEffect(() => {
-        if (status === 'idle') {
+        if (statusCountries === 'idle') {
             dispatch(fetchCountries());
         }
-
-        if (selectedCountry) {
-            dispatch(fetchGraphData(selectedCountry));
-        };
-
-    }, [status, dispatch, selectedCountry]);
+    }, [statusCountries, dispatch, selectedCountry]);
 
     const handleCountryClick = (country) => {
         dispatch(setSelectedCountry(country));
+        dispatch(fetchGraphData(selectedCountry))
     };
 
     return (

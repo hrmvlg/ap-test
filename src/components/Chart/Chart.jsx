@@ -29,14 +29,17 @@ export default function Chart() {
     );
 
     const dispatch = useDispatch();
-    const { status, datasets, labels } = useSelector((state) => state.graph);
+    const { datasets, labels } = useSelector((state) => state.graph);
+    const { statusCategories, statusCountries } = useSelector((state) => state.ui);
 
     useEffect(() => {
-        if (status === 'idle') {
-            dispatch(fetchGraphData());
+        if (statusCategories === 'idle') {
             dispatch(fetchCategories());
         }
-    }, [status, dispatch]);
+        if (statusCategories === 'succeeded' && statusCountries === 'succeeded') {
+            dispatch(fetchGraphData());
+        }
+    }, [statusCategories, statusCountries, dispatch]);
 
     const options = {
         responsive: true,
