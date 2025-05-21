@@ -15,11 +15,6 @@ import { Line } from 'react-chartjs-2';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchGraphData } from '../../slices/graphSlice';
 import { fetchCategories } from '../../slices/uiSlice';
-import subCategoryMap from '../../consts/subCategoryMap';
-
-import getRandomColor from '../../helpers/getRandomColor';
-import findCategoryById from '../../helpers/findCategoryById';
-import { getLast30Days, getLast30DaysISO } from '../../helpers/dateHelpers';
 
 export default function Chart() {
 
@@ -33,45 +28,15 @@ export default function Chart() {
         Legend
     );
 
-    const labels = getLast30Days();
-    const searchDates = getLast30DaysISO();
-    const datasets = [];
-
     const dispatch = useDispatch();
-    const { graphData, status } = useSelector((state) => state.graph);
-    const { categories } = useSelector((state) => state.ui);
+    const { status, datasets, labels } = useSelector((state) => state.graph);
 
     useEffect(() => {
         if (status === 'idle') {
             dispatch(fetchGraphData());
             dispatch(fetchCategories());
         }
-
     }, [status, dispatch]);
-
-    if (graphData) {
-        const rawData = graphData;
-        for (const categoryId in rawData) {
-            for (const subCategoryId in rawData[categoryId]) {
-                const dataPoints = searchDates.map(date => rawData[categoryId][subCategoryId][date] ?? null);
-
-                const subCategory = subCategoryMap[subCategoryId] || subCategoryId;
-                const category = findCategoryById(categories, categoryId) || categoryId;
-                const color = getRandomColor();
-
-                datasets.push({
-                    label: `${category.name ? category.name : categoryId} - ${subCategory}`,
-                    data: dataPoints,
-                    borderColor: color,
-                    backgroundColor: color,
-                    pointRadius: 0,
-                    tension: 0.3,
-                    fill: false,
-                    spanGaps: true
-                });
-            }
-        }
-    };
 
     const options = {
         responsive: true,
@@ -93,7 +58,6 @@ export default function Chart() {
                     size: 18
                 }
             },
-
         },
         scales: {
             y: {
@@ -112,7 +76,7 @@ export default function Chart() {
     };
 
     const data = {
-        labels,
+        labels: labels,
         datasets: datasets,
     };
 
