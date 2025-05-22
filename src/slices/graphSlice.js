@@ -10,8 +10,10 @@ export const fetchGraphData = createAsyncThunk(
         const state = thunkAPI.getState();
         const selectedCountry = state.ui.selectedCountry.id;
         const categories = state.ui.categories;
+
         const labels = getLast30Days();
         const last30DaysISO = getLast30DaysISO();
+
         const datasets = [];
         const csv = [];
 
@@ -24,10 +26,9 @@ export const fetchGraphData = createAsyncThunk(
             if (!response.ok) {
                 throw new Error('Не удалось загрузить данные');
             }
-            const graphData = await response.json();
+            const { data: rawData } = await response.json();
 
-            if (graphData) {
-                const rawData = graphData.data;
+            if (rawData) {
                 for (const categoryId in rawData) {
                     for (const subCategoryId in rawData[categoryId]) {
                         const dataPoints = last30DaysISO.map(date => rawData[categoryId][subCategoryId][date] ?? null);
@@ -55,20 +56,19 @@ export const fetchGraphData = createAsyncThunk(
                                 date: date,
                                 value: rawDataDates[date]
                             })
-                        }
-                    }
+                        };
+                    };
                 };
 
                 return {
                     'datasets': datasets,
                     'labels': labels,
                     'csv': csv,
-                    'last30DaysISO': last30DaysISO,
                 };
             }
         } catch (error) {
             return thunkAPI.rejectWithValue(error.message);
-        }
+        };
     }
 );
 
@@ -78,7 +78,6 @@ const graphSlice = createSlice({
         datasets: [],
         labels: [],
         csv: [],
-        last30DaysISO: [],
         status: 'idle',
         error: null
     },
@@ -93,7 +92,6 @@ const graphSlice = createSlice({
                 state.datasets = action.payload.datasets;
                 state.labels = action.payload.labels;
                 state.csv = action.payload.csv;
-                state.last30DaysISO = action.payload.last30DaysISO;
             })
             .addCase(fetchGraphData.rejected, (state, action) => {
                 state.status = 'failed';
