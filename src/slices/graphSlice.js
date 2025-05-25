@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { getLast30DaysISO, getLast30Days } from '../helpers/dateHelpers';
 import findCategoryById from '../helpers/findCategoryById';
-import getRandomColor from '../helpers/getRandomColor';
+import { hashStringToColor } from '../helpers/hashStringToColor';
 import subCategoryMap from '../consts/subCategoryMap';
 
 export const fetchGraphData = createAsyncThunk(
@@ -35,8 +35,8 @@ export const fetchGraphData = createAsyncThunk(
 
                         const subCategory = subCategoryMap[subCategoryId];
                         const category = findCategoryById(categories, categoryId);
-                        const color = getRandomColor();
                         const fullLabel = `${category.name ? category.name : categoryId} - ${subCategory}`;
+                        const color = await hashStringToColor(fullLabel);
 
                         datasets.push({
                             label: fullLabel,
